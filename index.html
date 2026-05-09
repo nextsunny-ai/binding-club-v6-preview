@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BINDING CLUB v6 — 울트라백화점 부산</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Caveat+Brush&family=Nanum+Myeongjo:wght@400;700;800&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1F1F1D;
+  --cream: #FBF2DD;
+  --pink: #F8C8D0;
+  --red: #E64535;
+  --yellow: #FBD449;
+  --sky: #7DC3E8;
+  --mint: #A8D8C0;
+  --lav: #C5B8E0;
+  --peach: #F4A88E;
+  --white: #FFFFFF;
+  --bw: 3px;
+  --kr: 'Pretendard', system-ui, sans-serif;
+  --en: 'Lilita One', 'Pretendard', sans-serif;
+  --hand: 'Caveat Brush', 'Pretendard', cursive;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--kr);
+  font-weight: 600;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+.screen { position: fixed; inset: 0; display: none; flex-direction: column; }
+.screen.active { display: flex; }
+.demo-badge {
+  position: fixed; bottom: 14px; right: 14px;
+  background: var(--ink); color: var(--white);
+  font-family: var(--en);
+  font-size: 11px; letter-spacing: 0.18em;
+  padding: 8px 14px; z-index: 9999;
+  border: var(--bw) solid var(--ink);
+  border-radius: 100px;
+}
+
+/* ============================================ */
+/* SCREEN 0 — INTRO                              */
+/* ============================================ */
+#intro {
+  background: var(--pink);
+  align-items: center; justify-content: center; text-align: center;
+  position: relative; overflow: hidden; cursor: pointer;
+  padding: 4vh 5vw;
+}
+.intro-confetti { position: absolute; inset: 0; pointer-events: none; }
+.intro-confetti svg.float { position: absolute; animation: float 4s ease-in-out infinite; }
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(var(--r,0deg)); }
+  50%     { transform: translateY(-14px) rotate(calc(var(--r,0deg) + 8deg)); }
+}
+
+.intro-tag {
+  background: var(--ink); color: var(--cream);
+  font-family: var(--en);
+  font-size: clamp(11px, 1vw, 14px);
+  letter-spacing: 0.32em;
+  padding: 8px 22px;
+  border-radius: 100px;
+  margin-bottom: 18px;
+  position: relative; z-index: 5;
+}
+.intro-title {
+  font-family: var(--kr);
+  font-weight: 900;
+  font-size: clamp(72px, 8vw, 130px);
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+  color: var(--ink);
+  position: relative; z-index: 5;
+  margin-bottom: 28px;
+  text-shadow: 5px 5px 0 var(--white);
+}
+.intro-en {
+  font-family: var(--en);
+  font-size: clamp(28px, 3vw, 48px);
+  letter-spacing: 0.04em;
+  background: var(--yellow);
+  color: var(--ink);
+  border: var(--bw) solid var(--ink);
+  padding: 4px 22px 6px;
+  border-radius: 100px;
+  margin-bottom: 22px;
+  display: inline-block;
+  transform: rotate(-2deg);
+  position: relative; z-index: 5;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.intro-sub {
+  font-family: var(--kr);
+  font-weight: 800;
+  font-size: clamp(15px, 1.4vw, 20px);
+  letter-spacing: -0.01em;
+  position: relative; z-index: 5;
+  margin-bottom: 6px;
+}
+.intro-meta {
+  font-family: var(--en);
+  font-size: clamp(10px, 0.85vw, 12px);
+  letter-spacing: 0.22em;
+  opacity: 0.7;
+  position: relative; z-index: 5;
+  line-height: 1.6;
+}
+.intro-cta {
+  margin-top: clamp(20px, 3vh, 36px);
+  font-family: var(--en);
+  font-size: clamp(15px, 1.3vw, 18px);
+  letter-spacing: 0.06em;
+  background: var(--red);
+  color: var(--white);
+  padding: 14px 30px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 100px;
+  display: inline-block;
+  position: relative; z-index: 5;
+  box-shadow: 5px 5px 0 var(--ink);
+  animation: nudge 1.4s ease-in-out infinite;
+}
+@keyframes nudge {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ============================================ */
+/* SCREEN 1 — GALLERY                            */
+/* ============================================ */
+#gallery {
+  background: var(--cream);
+  padding: 24px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.g-bg-dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(31,31,29,0.08) 1.4px, transparent 1.4px);
+  background-size: 26px 26px;
+  pointer-events: none;
+}
+.g-head {
+  display: flex; justify-content: space-between; align-items: center;
+  flex: none; gap: 24px;
+  position: relative; z-index: 2;
+}
+.g-brand {
+  display: flex; align-items: center; gap: 12px;
+}
+.g-brand .badge {
+  width: 56px; height: 56px;
+  background: var(--red);
+  border: var(--bw) solid var(--ink);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.g-brand .badge svg { width: 38px; height: 38px; }
+.g-brand .name {
+  font-family: var(--kr);
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+.g-brand .name small {
+  display: block;
+  font-family: var(--en);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--red);
+  font-weight: 400;
+  margin-top: 4px;
+}
+.g-meta {
+  text-align: right;
+  font-family: var(--en);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  line-height: 1.6;
+}
+.g-meta strong {
+  display: inline-block;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.g-headline-row {
+  display: flex; justify-content: space-between; align-items: end;
+  margin-top: 18px;
+  flex: none;
+  gap: 24px;
+  position: relative; z-index: 2;
+}
+.g-headline {
+  font-family: var(--kr);
+  font-weight: 900;
+  font-size: clamp(36px, 3.4vw, 52px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.g-headline em {
+  font-style: normal;
+  background: var(--ink);
+  color: var(--yellow);
+  padding: 0 14px;
+  display: inline-block;
+  transform: rotate(-2deg);
+}
+.g-sub {
+  max-width: 360px;
+  font-family: var(--kr);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.55;
+  opacity: 0.8;
+  text-align: right;
+}
+
+.g-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr;
+  gap: 18px;
+  margin-top: 18px;
+  min-height: 0;
+  position: relative; z-index: 2;
+  align-items: stretch;
+}
+
+.book {
+  position: relative;
+  border-radius: 4px 10px 10px 4px;
+  border: var(--bw) solid var(--ink);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow:
+    inset 14px 0 14px -10px rgba(0,0,0,0.35),
+    7px 8px 0 var(--ink),
+    14px 18px 28px rgba(0,0,0,0.18);
+  display: flex; flex-direction: column;
+  padding: 16px 14px 14px 26px;
+  width: 100%;
+  height: 100%;
+  align-self: stretch;
+  justify-self: stretch;
+}
+.book::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 14px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.4), rgba(0,0,0,0.1));
+  border-right: 1.5px solid rgba(0,0,0,0.35);
+  pointer-events: none;
+  z-index: 6;
+}
+.book::after {
+  content: '';
+  position: absolute;
+  top: 4px; bottom: 4px; right: 0;
+  width: 4px;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+  z-index: 6;
+}
+.book:nth-child(1) { transform: rotate(-1.2deg); }
+.book:nth-child(2) { transform: rotate(0.8deg); }
+.book:nth-child(3) { transform: rotate(-0.6deg); }
+.book:nth-child(4) { transform: rotate(1.2deg); }
+.book:nth-child(5) { transform: rotate(-1deg); }
+.book:hover {
+  transform: translate(-4px,-8px) rotate(0deg);
+  box-shadow:
+    inset 14px 0 14px -10px rgba(0,0,0,0.35),
+    10px 12px 0 var(--red),
+    18px 24px 36px rgba(0,0,0,0.25);
+}
+
+.book .num {
+  font-family: var(--en);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 3px 9px;
+  border-radius: 100px;
+  align-self: flex-start;
+  margin-bottom: 4px;
+}
+.book .b-en {
+  font-family: var(--en);
+  font-size: clamp(13px, 1.1vw, 17px);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.book .b-kr {
+  font-family: var(--kr);
+  font-weight: 900;
+  font-size: clamp(22px, 2.1vw, 32px);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+.book .b-illo {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  margin: 4px 0;
+  min-height: 0;
+}
+.book .b-illo svg { width: 88%; height: auto; max-height: 100%; }
+.book .b-foot {
+  font-family: var(--en);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  border-top: 1.5px dashed currentColor;
+  padding-top: 6px;
+  opacity: 0.85;
+}
+
+/* === 5 books — different mood each, unified illustration vocabulary === */
+/* 1. astro — lavender + moon cat */
+.book[data-style="astro"] { background: var(--lav); color: var(--ink); }
+.book[data-style="astro"] .b-en { color: var(--ink); }
+
+/* 2. scatter — cream + scatter pattern */
+.book[data-style="scatter"] { background: var(--cream); color: var(--ink); }
+.book[data-style="scatter"] .b-en { color: var(--red); }
+.book[data-style="scatter"] .scatter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+  align-items: center;
+  justify-items: center;
+}
+.book[data-style="scatter"] .scatter-grid svg { width: 100%; height: auto; }
+
+/* 3. diagram — sky + studious cat */
+.book[data-style="diagram"] {
+  background: var(--sky); color: var(--ink);
+  background-image:
+    linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+.book[data-style="diagram"] .b-en { color: var(--ink); }
+
+/* 4. pop — red + dancer */
+.book[data-style="pop"] { background: var(--red); color: var(--cream); }
+.book[data-style="pop"] .b-en { color: var(--yellow); }
+.book[data-style="pop"] .num { background: var(--yellow); color: var(--ink); }
+
+/* 5. manga — yellow + lightning rebel */
+.book[data-style="manga"] { background: var(--yellow); color: var(--ink); }
+.book[data-style="manga"] .b-en { color: var(--red); }
+
+.g-foot {
+  margin-top: 10px;
+  font-family: var(--en);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-align: center;
+  opacity: 0.55;
+  flex: none;
+  position: relative; z-index: 2;
+}
+
+/* ============================================ */
+/* SCREEN 2 — DESIGNER                           */
+/* ============================================ */
+#designer {
+  background: var(--cream);
+  flex-direction: row;
+}
+
+.d-side-l {
+  width: 240px;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-right: var(--bw) solid var(--ink);
+}
+.d-logo {
+  font-family: var(--kr);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -0.05em;
+  display: flex; align-items: center; gap: 10px;
+}
+.d-logo .badge {
+  width: 36px; height: 36px;
+  background: var(--red);
+  border: 2px solid var(--cream);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.d-logo .badge svg { width: 24px; height: 24px; }
+.d-logo small {
+  display: block;
+  font-family: var(--en);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--yellow);
+  margin-top: 3px;
+}
+
+.d-label {
+  font-family: var(--en);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--yellow);
+  margin-top: 8px;
+}
+.cat-tabs {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+.cat-tab {
+  padding: 7px 6px;
+  background: #2a2a28;
+  color: var(--cream);
+  border: 2px solid #3a3a38;
+  border-radius: 100px;
+  font-family: var(--kr);
+  font-weight: 800;
+  font-size: 11px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.cat-tab:hover { border-color: var(--yellow); }
+.cat-tab.active {
+  background: var(--red);
+  color: var(--white);
+  border-color: var(--ink);
+}
+.palette {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  overflow-y: auto;
+  padding: 8px;
+  background: #161614;
+  border: 2px solid #3a3a38;
+  border-radius: 12px;
+  align-content: start;
+}
+.pal-item {
+  aspect-ratio: 1;
+  background: var(--cream);
+  border: 2px solid #3a3a38;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s;
+  padding: 4px;
+}
+.pal-item svg { width: 100%; height: 100%; }
+.pal-item:hover { border-color: var(--yellow); transform: scale(1.06); }
+
+/* 배경 카테고리 카드 = 사진 풀 */
+.bg-default-btn {
+  grid-column: 1 / -1;
+  padding: 9px 10px;
+  background: var(--ink);
+  color: var(--yellow);
+  border: 2px solid var(--yellow);
+  border-radius: 100px;
+  font-family: var(--kr);
+  font-weight: 800;
+  font-size: 11px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 6px;
+  transition: all 0.15s;
+}
+.bg-default-btn:hover { background: var(--red); border-color: var(--cream); color: var(--cream); }
+.bg-pal-item {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  padding: 0 !important;
+  background-color: var(--cream);
+}
+.bg-pal-item:hover { transform: scale(1.06); border-color: var(--yellow); box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+
+/* ==================================================
+   PRINT — 캔버스(책 표지)만 A4 한 장으로 인쇄
+   ================================================== */
+@media print {
+  @page { size: A4 portrait; margin: 12mm; }
+  html, body {
+    background: #FFFFFF !important;
+    width: 100% !important; height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  /* 데모 배지·어드민 버튼·시뮬레이션 화면 = 모두 숨김 */
+  .demo-badge, #bindAdminBtn, #bindAdminPanel,
+  .screen#intro, .screen#gallery, .screen#printing { display: none !important; }
+  /* 디자이너 화면 = 펼쳐서 표시 (active 아니어도) */
+  .screen#designer {
+    display: flex !important;
+    position: static !important;
+    inset: auto !important;
+    flex-direction: column !important;
+    height: auto !important;
+  }
+  /* 사이드바·툴바 = 숨김. 캔버스만 가운데 */
+  .d-side-l, .d-side-r, .toolbar { display: none !important; }
+  .d-center {
+    flex: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+    align-items: center !important;
+  }
+  .canvas-wrap { width: 100% !important; }
+  .canvas {
+    width: 160mm !important;
+    height: 226mm !important;   /* A4 비율 1:1.414 유지 */
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    border: 2px solid #000 !important;
+    page-break-inside: avoid !important;
+  }
+  /* 캔버스 요소 선택 표시·리사이즈 핸들 = 숨김 */
+  .cv-el.selected { outline: none !important; }
+  .cv-el .resize { display: none !important; }
+}
+
+.d-back {
+  background: var(--cream);
+  color: var(--ink);
+  border: 2px solid var(--cream);
+  padding: 9px;
+  font-family: var(--kr);
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 100px;
+}
+.d-back:hover { background: var(--yellow); }
+
+/* CENTER */
+.d-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+}
+.canvas-wrap { position: relative; }
+.canvas {
+  width: 480px;
+  height: 680px;
+  background: var(--cream);
+  border: 4px solid var(--ink);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 12px 14px 0 var(--ink);
+}
+.canvas[data-style="astro"]   { background: var(--lav); }
+.canvas[data-style="scatter"] { background: var(--cream); }
+.canvas[data-style="diagram"] {
+  background: var(--sky);
+  background-image:
+    linear-gradient(rgba(0,0,0,0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.09) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+.canvas[data-style="pop"]     { background: var(--red); }
+.canvas[data-style="manga"]   { background: var(--yellow); }
+
+.cv-el {
+  position: absolute;
+  cursor: move;
+  user-select: none;
+  outline: none;
+  touch-action: none;
+}
+.cv-el.selected {
+  outline: 2px dashed var(--red);
+  outline-offset: 4px;
+}
+.cv-el .resize {
+  display: none;
+  position: absolute;
+  width: 16px; height: 16px;
+  background: var(--red);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  bottom: -8px; right: -8px;
+  cursor: nwse-resize;
+}
+.cv-el.selected .resize { display: block; }
+.cv-el.text {
+  padding: 4px 8px;
+  white-space: nowrap;
+  line-height: 1;
+}
+.cv-el.text.editing {
+  outline: 2px solid var(--red);
+  background: rgba(255,255,255,0.85);
+  cursor: text;
+}
+.cv-el.sticker svg { width: 100%; height: 100%; display: block; pointer-events: none; }
+.cv-el.sticker { width: 90px; height: 90px; }
+
+.toolbar {
+  display: flex; gap: 8px;
+  margin-top: 18px;
+}
+.tb {
+  font-family: var(--kr);
+  font-weight: 800;
+  font-size: 13px;
+  background: var(--cream);
+  color: var(--ink);
+  border: var(--bw) solid var(--ink);
+  padding: 9px 18px;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.tb:hover { background: var(--yellow); }
+.tb.danger { background: var(--ink); color: var(--cream); }
+.tb.danger:hover { background: var(--red); }
+
+/* RIGHT */
+.d-side-r {
+  width: 280px;
+  background: var(--white);
+  border-left: var(--bw) solid var(--ink);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dr-input {
+  width: 100%;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  padding: 10px 12px;
+  font-family: var(--kr);
+  font-weight: 700;
+  font-size: 14px;
+  outline: none;
+  border-radius: 10px;
+}
+.dr-input:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(230,69,53,0.18);
+}
+.dr-add {
+  background: var(--ink);
+  color: var(--cream);
+  border: var(--bw) solid var(--ink);
+  padding: 10px;
+  font-family: var(--kr);
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 100px;
+}
+.dr-add:hover { background: var(--red); }
+
+.color-row {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+}
+.color-chip {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+}
+.color-chip:hover { transform: scale(1.12); }
+.color-chip.active { box-shadow: 0 0 0 3px var(--yellow), 0 0 0 5px var(--ink); }
+
+.font-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.font-chip {
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 8px 4px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ink);
+  transition: all 0.15s;
+}
+.font-chip small {
+  display: block;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+.font-chip:hover { background: var(--yellow); transform: translateY(-2px); }
+.font-chip.active { background: var(--ink); color: var(--cream); border-color: var(--red); box-shadow: 0 0 0 2px var(--red); }
+.font-chip.active small { opacity: 1; }
+
+.dr-info {
+  background: var(--cream);
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px dashed var(--ink);
+  font-family: var(--kr);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1.65;
+  opacity: 0.85;
+}
+.dr-info strong {
+  display: block;
+  font-family: var(--en);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  margin-bottom: 6px;
+  color: var(--red);
+  font-weight: 400;
+}
+.dr-print {
+  background: var(--red);
+  color: var(--white);
+  border: var(--bw) solid var(--ink);
+  padding: 14px;
+  font-family: var(--en);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-radius: 100px;
+  margin-top: auto;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.dr-print:hover {
+  background: var(--ink);
+  transform: translate(-2px,-2px);
+  box-shadow: 7px 7px 0 var(--red);
+}
+
+/* ============================================ */
+/* SCREEN 3 — PRINTING                           */
+/* ============================================ */
+#printing {
+  background: var(--ink);
+  align-items: center; justify-content: center;
+  text-align: center;
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.print-anim {
+  width: 200px; height: 200px;
+  position: relative;
+  margin-bottom: 28px;
+}
+.print-anim::before {
+  content: '';
+  position: absolute; inset: 0;
+  border: 6px solid var(--red);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+.print-anim .glyph {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 110px; height: 110px;
+  animation: pop 1s ease-in-out infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pop {
+  0%,100% { transform: translate(-50%,-50%) scale(1); }
+  50% { transform: translate(-50%,-50%) scale(1.1); }
+}
+.print-title {
+  font-family: var(--en);
+  font-size: 64px;
+  letter-spacing: 0.02em;
+}
+.print-sub {
+  font-family: var(--kr);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.65);
+  margin-top: 8px;
+}
+#printDone { display: none; flex-direction: column; align-items: center; }
+#printDone.show { display: flex; }
+.done-num {
+  font-family: var(--en);
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  background: var(--yellow);
+  color: var(--ink);
+  padding: 8px 22px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+  border: var(--bw) solid var(--cream);
+}
+.done-msg {
+  font-family: var(--kr);
+  font-weight: 900;
+  font-size: clamp(56px, 6.5vw, 88px);
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+  margin-bottom: 14px;
+}
+.done-msg em {
+  font-style: normal;
+  color: var(--red);
+}
+.done-tag {
+  font-family: var(--kr);
+  font-weight: 600;
+  font-size: 17px;
+  opacity: 0.85;
+  margin-bottom: 50px;
+}
+.done-cta {
+  font-family: var(--en);
+  font-size: 18px;
+  background: var(--cream);
+  color: var(--ink);
+  padding: 14px 30px;
+  border-radius: 100px;
+  cursor: pointer;
+  border: var(--bw) solid var(--cream);
+  box-shadow: 5px 5px 0 var(--red);
+  letter-spacing: 0.04em;
+}
+.done-cta:hover { background: var(--yellow); }
+</style>
+</head>
+<body>
+
+<div class="demo-badge">DEMO v6</div>
+
+<!-- SCREEN 0 — INTRO -->
+<div class="screen active" id="intro" onclick="goGallery()">
+  <div class="intro-confetti" id="introConfetti"></div>
+
+  <div class="intro-tag">★ ULTRA DEPT.STORE BUSAN ★</div>
+  <h1 class="intro-title">바인딩<br>클럽</h1>
+  <div class="intro-en">BINDING CLUB</div>
+  <div class="intro-sub">5가지 무드 · 당신만의 한 권</div>
+  <div class="intro-meta">
+    BUSAN · MAY 29 · 2026<br>
+    LIMITED EDITION No.0237/9999
+  </div>
+  <div class="intro-cta">▸ 시작하기 [ENTER]</div>
+</div>
+
+<!-- SCREEN 1 — GALLERY -->
+<div class="screen" id="gallery">
+  <div class="g-bg-dots"></div>
+
+  <div class="g-head">
+    <div class="g-brand" onclick="goIntro()" style="cursor:pointer;" title="처음 화면으로">
+      <div class="badge" id="brandBadge"></div>
+      <div class="name">바인딩 클럽<small>BINDING CLUB · DESK</small></div>
+    </div>
+    <div class="g-meta">
+      ULTRA DEPT.STORE BUSAN · 2026.05.29<br>
+      <strong>★ DEMO ED. · No.0237 ★</strong>
+    </div>
+  </div>
+
+  <div class="g-headline-row">
+    <h2 class="g-headline">오늘 어떤 <em>무드</em>로 만들까?</h2>
+    <p class="g-sub">5가지 책 무드 중 하나를 골라 시작합니다. 표지 위에 텍스트·캐릭터·스티커를 자유롭게 배치해 본인만의 한정판을 만드세요.</p>
+  </div>
+
+  <div class="g-grid" id="bookGrid"></div>
+
+  <div class="g-foot">▸ TAP A BOOK TO START · 책을 터치해 시작</div>
+</div>
+
+<!-- SCREEN 2 — DESIGNER -->
+<div class="screen" id="designer">
+  <div class="d-side-l">
+    <div class="d-logo" onclick="goIntro()" style="cursor:pointer;" title="처음 화면으로">
+      <div class="badge" id="dBadge"></div>
+      <div>바인딩 클럽<small>★ DESIGNER</small></div>
+    </div>
+
+    <div class="d-label">CATEGORY</div>
+    <div class="cat-tabs">
+      <div class="cat-tab active" data-cat="animal">동물</div>
+      <div class="cat-tab" data-cat="nature">자연</div>
+      <div class="cat-tab" data-cat="object">사물</div>
+      <div class="cat-tab" data-cat="effect">효과</div>
+      <div class="cat-tab cat-tab-bg" data-cat="bg" style="grid-column:1/-1;background:var(--ink);color:var(--yellow);border-color:var(--yellow);">배경 ✦</div>
+    </div>
+    <div class="palette" id="palette"></div>
+    <button class="d-back" onclick="goGallery()">← 다른 책 고르기</button>
+  </div>
+
+  <div class="d-center">
+    <div class="canvas-wrap">
+      <div class="canvas" id="canvas" data-style="astro"></div>
+    </div>
+    <div class="toolbar">
+      <button class="tb" onclick="undo()">↺ UNDO</button>
+      <button class="tb" onclick="clearAll()">CLEAR</button>
+      <button class="tb danger" onclick="deleteSelected()">선택 삭제 [DEL]</button>
+    </div>
+  </div>
+
+  <div class="d-side-r">
+    <div class="d-label" style="color: var(--red); margin-top:0">TEXT</div>
+    <input class="dr-input" id="newText" type="text" placeholder="제목·작가명·인용 한 줄..." maxlength="40">
+
+    <div class="d-label" style="color: var(--red);">색상</div>
+    <div class="color-row" id="colorRow"></div>
+
+    <div class="d-label" style="color: var(--red);">폰트</div>
+    <div class="font-row" id="fontRow"></div>
+
+    <button class="dr-add" onclick="addText()">+ 캔버스에 추가</button>
+
+    <div class="dr-info">
+      <strong>★ HOW TO</strong>
+      ▸ 좌측 팔레트 = 클릭해서 추가<br>
+      ▸ 캔버스 요소 = 드래그로 이동<br>
+      ▸ 우하단 빨간 점 = 크기 조정<br>
+      ▸ 더블탭 = 텍스트 편집<br>
+      ▸ 클릭 → DEL = 삭제
+    </div>
+
+    <button class="dr-print" onclick="goPrint()">PRINT ▸ 인쇄 [P]</button>
+  </div>
+</div>
+
+<!-- SCREEN 3 — PRINTING -->
+<div class="screen" id="printing">
+  <div id="printActive" style="display:flex; flex-direction:column; align-items:center;">
+    <div class="print-anim"><div class="glyph" id="printGlyph"></div></div>
+    <div class="print-title">PRINTING ★</div>
+    <div class="print-sub">레이저 프린터 출력 중 · 약 12초</div>
+  </div>
+  <div id="printDone">
+    <div class="done-num">★ <span id="dStyle">No.01</span> · #<span id="dSerial">0237</span>/9999 ★</div>
+    <h1 class="done-msg">한정판 <em>내 책</em><br>발행 완료!</h1>
+    <div class="done-tag">"오늘 만든 한 권은 전 세계 단 하나의 굿즈입니다."</div>
+    <div class="done-cta" onclick="goGallery()">▸ 다른 책 만들기 [SPACE]</div>
+  </div>
+</div>
+
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#F8C8D0"/><text x="50" y="58" font-family="sans-serif" font-size="32" font-weight="900" fill="#1F1F1D" text-anchor="middle">B5</text></svg>
+</template>
+<script src="v5_icons.js"></script>
+<script src="v5_books.js"></script>
+<script src="v5_app.js"></script>
+<!-- ★ ADMIN PANEL (Ctrl+Shift+A or click ⚙ button bottom-left) ★ -->
+<script src="admin-binding-config.js"></script>
+<script src="admin-binding.js"></script>
+</body>
+</html>
