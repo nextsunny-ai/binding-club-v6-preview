@@ -72,7 +72,7 @@ html, body {
   background: var(--pink);
   align-items: center; justify-content: center; text-align: center;
   position: relative; overflow: hidden; cursor: pointer;
-  padding: 4vh 5vw;
+  padding: 60px 80px;
 }
 .intro-confetti { position: absolute; inset: 0; pointer-events: none; }
 .intro-confetti svg.float { position: absolute; animation: float 4s ease-in-out infinite; }
@@ -158,7 +158,7 @@ html, body {
 /* ============================================ */
 #gallery {
   background: var(--cream);
-  padding: 24px 36px;
+  padding: 32px 50px;
   position: relative;
   overflow: hidden;
 }
@@ -792,13 +792,14 @@ html, body {
 /* ============================================ */
 #printing {
   background: var(--ink);
-  align-items: center; justify-content: center;
+  align-items: stretch; justify-content: stretch;
   text-align: center;
   color: var(--cream);
   position: relative;
   overflow: hidden;
 }
 #printActive {
+  flex: 1;
   width: 100%; height: 100%;
   display: none;
   flex-direction: column;
@@ -907,6 +908,7 @@ html, body {
   margin-top: 12px;
 }
 #printDone {
+  flex: 1;
   display: none;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
