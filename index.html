@@ -2,7 +2,24 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" id="vmeta" content="width=1366, initial-scale=1.0">
+<script>
+/* iPad 13" (1366×1024 CSS px, 4:3 가로) 베이스 = 자동 스케일.
+   - 화면이 더 크면 = scale 1.0 (그대로)
+   - 화면이 더 작으면 = 1366 기준 비율로 축소 (모든 화면 비율 유지) */
+(function() {
+  function fitViewport() {
+    var w = Math.max(window.innerWidth, document.documentElement.clientWidth);
+    var meta = document.getElementById('vmeta');
+    if (!meta) return;
+    if (w < 1366) meta.setAttribute('content', 'width=1366, initial-scale=' + (w/1366).toFixed(4));
+    else meta.setAttribute('content', 'width=1366, initial-scale=1.0');
+  }
+  fitViewport();
+  window.addEventListener('orientationchange', function(){ setTimeout(fitViewport, 100); });
+  window.addEventListener('resize', function(){ setTimeout(fitViewport, 100); });
+})();
+</script>
 <title>BINDING CLUB v6 — 울트라백화점 부산</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -392,7 +409,7 @@ html, body {
 }
 
 .d-side-l {
-  width: 240px;
+  width: 260px;
   background: var(--ink);
   color: var(--cream);
   padding: 20px 16px;
@@ -655,7 +672,7 @@ html, body {
 
 /* RIGHT */
 .d-side-r {
-  width: 280px;
+  width: 300px;
   background: var(--white);
   border-left: var(--bw) solid var(--ink);
   padding: 20px 18px;
@@ -781,8 +798,76 @@ html, body {
   position: relative;
   overflow: hidden;
 }
+#printActive {
+  width: 100%; height: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 80px;
+  box-sizing: border-box;
+}
+#printActive[style*="flex"] { display: flex !important; }
+.print-active-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  justify-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+/* 좌측 = 책 미리보기 (출력 중 떨림) */
+.print-preview-wrap {
+  position: relative;
+  width: 100%; max-width: 380px;
+  aspect-ratio: 480 / 680;
+  justify-self: end;
+  animation: print-shake 0.4s ease-in-out infinite;
+  filter: drop-shadow(0 18px 28px rgba(0,0,0,0.5));
+}
+.print-preview {
+  width: 480px; height: 680px;
+  background: var(--cream);
+  border: 5px solid var(--ink);
+  border-radius: 6px;
+  position: absolute;
+  top: 0; left: 0;
+  overflow: hidden;
+  transform-origin: top left;
+}
+@keyframes print-shake {
+  0%,100% { transform: translate(0, 0) rotate(-1deg); }
+  25%     { transform: translate(-2px, 1px) rotate(0deg); }
+  50%     { transform: translate(2px, -1px) rotate(-1deg); }
+  75%     { transform: translate(-1px, 2px) rotate(0deg); }
+}
+.print-active-center {
+  display: flex; flex-direction: column; align-items: center;
+  justify-self: start;
+}
+.print-progress-bar {
+  margin-top: 24px;
+  width: 300px; height: 12px;
+  background: rgba(255,255,255,0.12);
+  border: 2px solid var(--cream);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+.print-progress-bar-fill {
+  position: absolute; top: 0; left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--yellow), var(--red));
+  animation: print-fill 2.8s linear forwards;
+}
+@keyframes print-fill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
 .print-anim {
-  width: 200px; height: 200px;
+  width: 240px; height: 240px;
   position: relative;
   margin-bottom: 28px;
 }
@@ -808,37 +893,108 @@ html, body {
 }
 .print-title {
   font-family: var(--en);
-  font-size: 64px;
+  font-size: 80px;
   letter-spacing: 0.02em;
+  color: var(--cream);
+  text-shadow: 4px 4px 0 var(--red);
 }
 .print-sub {
   font-family: var(--kr);
   font-weight: 800;
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.65);
-  margin-top: 8px;
+  color: rgba(255,255,255,0.75);
+  margin-top: 12px;
 }
-#printDone { display: none; flex-direction: column; align-items: center; }
-#printDone.show { display: flex; }
+#printDone {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  justify-items: center;
+  width: 100%; height: 100%;
+  padding: 50px 80px;
+  box-sizing: border-box;
+}
+#printDone.show { display: grid; }
+
+/* 좌측 = 만든 책 미리보기 (캔버스 복사) */
+.done-preview-wrap {
+  position: relative;
+  width: 100%; max-width: 420px;
+  aspect-ratio: 480 / 680;
+  justify-self: end;
+  transform: rotate(-3deg);
+  filter: drop-shadow(14px 18px 32px rgba(0,0,0,0.45));
+}
+.done-preview {
+  width: 480px; height: 680px;
+  background: var(--cream);
+  border: 5px solid var(--ink);
+  border-radius: 6px;
+  position: absolute;
+  top: 0; left: 0;
+  overflow: hidden;
+  transform-origin: top left;
+  /* JS = wrap.clientWidth / 480 로 scale 계산 */
+}
+.done-preview .cv-el { position: absolute; }
+.done-preview .cv-el .resize { display: none !important; }
+.done-preview .cv-el.selected { outline: none !important; }
+.done-preview-tape {
+  position: absolute;
+  width: 100px; height: 30px;
+  background: rgba(251,212,73,0.92);
+  border: 1px dashed rgba(0,0,0,0.25);
+  z-index: 5;
+}
+.done-tape-tl { top: -14px; left: -20px; transform: rotate(-12deg); background: rgba(230,69,53,0.88); }
+.done-tape-tr { top: -14px; right: -20px; transform: rotate(10deg); }
+.done-preview-stamp {
+  position: absolute;
+  bottom: 28px; right: -30px;
+  z-index: 6;
+  background: var(--red);
+  color: var(--cream);
+  font-family: var(--en);
+  font-size: 20px;
+  letter-spacing: 0.18em;
+  padding: 9px 20px;
+  border: 3px double var(--cream);
+  outline: 2px solid var(--ink);
+  transform: rotate(12deg);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* 우측 = 텍스트 + 메타 + CTA */
+.done-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 480px;
+  justify-self: start;
+}
 .done-num {
   font-family: var(--en);
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 0.22em;
   background: var(--yellow);
   color: var(--ink);
   padding: 8px 22px;
   border-radius: 100px;
-  margin-bottom: 24px;
+  margin-bottom: 26px;
   border: var(--bw) solid var(--cream);
+  align-self: flex-start;
 }
 .done-msg {
   font-family: var(--kr);
   font-weight: 900;
-  font-size: clamp(56px, 6.5vw, 88px);
+  font-size: clamp(60px, 6.5vw, 92px);
   letter-spacing: -0.05em;
-  line-height: 0.92;
-  margin-bottom: 14px;
+  line-height: 0.95;
+  margin-bottom: 22px;
+  color: var(--cream);
 }
 .done-msg em {
   font-style: normal;
@@ -847,16 +1003,18 @@ html, body {
 .done-tag {
   font-family: var(--kr);
   font-weight: 600;
-  font-size: 17px;
-  opacity: 0.85;
-  margin-bottom: 50px;
+  font-size: 19px;
+  opacity: 0.9;
+  margin-bottom: 40px;
+  line-height: 1.55;
+  color: var(--cream);
 }
 .done-cta {
   font-family: var(--en);
-  font-size: 18px;
+  font-size: 20px;
   background: var(--cream);
   color: var(--ink);
-  padding: 14px 30px;
+  padding: 16px 36px;
   border-radius: 100px;
   cursor: pointer;
   border: var(--bw) solid var(--cream);
@@ -968,16 +1126,32 @@ html, body {
 
 <!-- SCREEN 3 — PRINTING -->
 <div class="screen" id="printing">
-  <div id="printActive" style="display:flex; flex-direction:column; align-items:center;">
-    <div class="print-anim"><div class="glyph" id="printGlyph"></div></div>
-    <div class="print-title">PRINTING ★</div>
-    <div class="print-sub">레이저 프린터 출력 중 · 약 12초</div>
+  <div id="printActive" style="display:flex;">
+    <div class="print-active-grid">
+      <div class="print-preview-wrap">
+        <div class="print-preview" id="printPreview"></div>
+      </div>
+      <div class="print-active-center">
+        <div class="print-anim"><div class="glyph" id="printGlyph"></div></div>
+        <div class="print-title">PRINTING ★</div>
+        <div class="print-sub">레이저 프린터 출력 중 · 약 12초</div>
+        <div class="print-progress-bar"><div class="print-progress-bar-fill"></div></div>
+      </div>
+    </div>
   </div>
   <div id="printDone">
-    <div class="done-num">★ <span id="dStyle">No.01</span> · #<span id="dSerial">0237</span>/9999 ★</div>
-    <h1 class="done-msg">한정판 <em>내 책</em><br>발행 완료!</h1>
-    <div class="done-tag">"오늘 만든 한 권은 전 세계 단 하나의 굿즈입니다."</div>
-    <div class="done-cta" onclick="goGallery()">▸ 다른 책 만들기 [SPACE]</div>
+    <div class="done-preview-wrap">
+      <div class="done-preview-tape done-tape-tl"></div>
+      <div class="done-preview-tape done-tape-tr"></div>
+      <div class="done-preview" id="donePreview"></div>
+      <div class="done-preview-stamp">★ ISSUED</div>
+    </div>
+    <div class="done-content">
+      <div class="done-num">★ <span id="dStyle">No.01</span> · #<span id="dSerial">0237</span>/9999 ★</div>
+      <h1 class="done-msg">한정판 <em>내 책</em><br>발행 완료!</h1>
+      <div class="done-tag">"오늘 만든 한 권은<br>전 세계 단 하나의 굿즈입니다."</div>
+      <div class="done-cta" onclick="goGallery()">▸ 다른 책 만들기 [SPACE]</div>
+    </div>
   </div>
 </div>
 

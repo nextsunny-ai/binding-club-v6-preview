@@ -62,25 +62,54 @@ function pickBook(style) {
   selectedEl = null;
   pushHistory();
 }
+function snapshotCanvasTo(targetId) {
+  const canvas = document.getElementById('canvas');
+  const preview = document.getElementById(targetId);
+  if (!canvas || !preview) return;
+  preview.innerHTML = canvas.innerHTML;
+  const cs = window.getComputedStyle(canvas);
+  preview.style.backgroundColor = cs.backgroundColor;
+  preview.style.backgroundImage = canvas.style.backgroundImage || cs.backgroundImage;
+  preview.style.backgroundSize = canvas.style.backgroundSize || cs.backgroundSize;
+  preview.style.backgroundPosition = canvas.style.backgroundPosition || cs.backgroundPosition;
+  preview.style.backgroundRepeat = canvas.style.backgroundRepeat || cs.backgroundRepeat;
+}
+function fitPreview(wrapSel, previewId) {
+  const wrap = document.querySelector(wrapSel);
+  const preview = document.getElementById(previewId);
+  if (!wrap || !preview) return;
+  const scale = wrap.clientWidth / 480;
+  preview.style.transform = `scale(${scale})`;
+}
+function fitDonePreview() { fitPreview('.done-preview-wrap', 'donePreview'); }
+function fitPrintPreview() { fitPreview('.print-preview-wrap', 'printPreview'); }
+window.addEventListener('resize', () => { fitDonePreview(); fitPrintPreview(); });
+
 function goPrint() {
   // 선택 상태 / 리사이즈 핸들 숨겨서 인쇄에 안 보이게
   if (selectedEl) selectedEl.classList.remove('selected');
   selectedEl = null;
 
   // 메인 흐름 = 시뮬레이션만 (관람객) → 발행 완료 → OS 기억된 프린터로 자동 출력
-  // 다이얼로그는 어드민 "프린트 테스트" 버튼에서만 호출 (운영자 셋업용)
   document.getElementById('dStyle').textContent = 'No.0' + (BOOK_ORDER.indexOf(currentStyle) + 1);
   document.getElementById('dSerial').textContent =
     String(237 + Math.floor(Math.random() * 50)).padStart(4, '0');
+  // 캔버스 → 미리보기 스냅샷 (인쇄 중 + 인쇄 완료 둘 다)
+  snapshotCanvasTo('printPreview');
+  snapshotCanvasTo('donePreview');
   showScreen('printing');
   document.getElementById('printActive').style.display = 'flex';
   document.getElementById('printDone').classList.remove('show');
+  setTimeout(fitPrintPreview, 50);
   setTimeout(() => {
     document.getElementById('printActive').style.display = 'none';
     document.getElementById('printDone').classList.add('show');
+    setTimeout(fitDonePreview, 50);
   }, 2800);
   beep(880, 0.2);
 }
+// 어드민에서 호출 = 운영자 셋업 시 다이얼로그
+window.goPrint = goPrint;
 // 어드민에서 호출 = 운영자 셋업 시 다이얼로그
 window.goPrint = goPrint;
 
