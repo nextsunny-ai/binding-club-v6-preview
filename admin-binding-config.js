@@ -56,10 +56,27 @@ window.BINDING_BOOKS = [
 ];
 
 /* ---------- 3. BG_POOL (배경 이미지 풀) ---------- */
-/* 기본 풀 = 비어있음. 운영자가 어드민 → 배경 탭에서 추가:
-   - ⬆ PC 업로드 (자동 리사이즈 → base64) — 그 키오스크 PC만
-   - + 폴더 사진 등록 (uploads/ 폴더 사진 영구 등록) — 모든 키오스크 공유 */
-window.BINDING_BG_POOL = [];
+/* uploads/ 폴더 사진 18장 = 시연용 기본 풀. 운영자가 어드민에서 = 가리기·편집·추가 가능. */
+window.BINDING_BG_POOL = [
+  { key: 'miffy_dot',     label: '미피 · 컨페티 도트',  src: 'uploads/Cute Miffy Wallpaper Aesthetic _ Pastel Confetti iPhone Background.jpeg', mood: 'cute' },
+  { key: 'miffy_doodle',  label: '미피 · 학용품 두들',   src: 'uploads/🎀 aesthetic doodles on Miffy 🎀.jpeg', mood: 'cute' },
+  { key: 'hbd_cake',      label: 'HBD · 케이크',         src: 'uploads/happy birthday to you illustration.jpeg', mood: 'pop' },
+  { key: 'hbd_cats',      label: 'HBD · 고양이들',       src: 'uploads/Advocate-Art _ London - Seville - New York.jpeg', mood: 'illustration' },
+  { key: 'neo_brutal',    label: '네오 브루탈',          src: 'uploads/Neo-Brutal English School_ Learn & Design.jpeg', mood: 'pop' },
+  { key: 'comic_font',    label: '코믹 폰트 레이아웃',   src: 'uploads/How to use comic font ibis paint in creative layouts.jpeg', mood: 'manga' },
+  { key: 'nyonyo',        label: 'Nyonyo Chanel',        src: 'uploads/Nyonyo Chanel Typeface Font.jpeg', mood: 'pop' },
+  { key: 'awwwards',      label: 'Awwwards 패턴',        src: 'uploads/- Awwwards.jpeg', mood: 'editorial' },
+  { key: 'pasted_a',      label: '패턴 A',               src: 'uploads/pasted-1778252399438-0.png', mood: 'pattern' },
+  { key: 'pasted_b',      label: '패턴 B',               src: 'uploads/pasted-1778252475828-0.png', mood: 'pattern' },
+  { key: 'pasted_c',      label: '패턴 C',               src: 'uploads/pasted-1778255346767-0.png', mood: 'pattern' },
+  { key: 'pasted_d',      label: '패턴 D',               src: 'uploads/pasted-1778255456578-0.png', mood: 'pattern' },
+  { key: 'sample_2',      label: '샘플 2',               src: 'uploads/2.jpg', mood: 'sample' },
+  { key: 'down_10',       label: '다운로드 10',          src: 'uploads/다운로드 (10).jpeg', mood: 'sample' },
+  { key: 'down_11',       label: '다운로드 11',          src: 'uploads/다운로드 (11).jpeg', mood: 'sample' },
+  { key: 'down_13',       label: '다운로드 13',          src: 'uploads/다운로드 (13).webp', mood: 'sample' },
+  { key: 'down_16',       label: '다운로드 16',          src: 'uploads/다운로드 (16).webp', mood: 'sample' },
+  { key: 'down_17',       label: '다운로드 17',          src: 'uploads/다운로드 (17).webp', mood: 'sample' }
+];
 
 /* ---------- 4. FONT_POOL (폰트 풀) ---------- */
 /* CSS 변수: --kr (한글 본문), --en (영문 헤더), --hand (손글씨) */
