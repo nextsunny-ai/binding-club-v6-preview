@@ -826,6 +826,20 @@
   /* ============ DATA TAB ============ */
   function renderData(){
     body.innerHTML = (
+      /* === 프린트 셋업 (운영자 1회 셋업용) === */
+      '<div class="bAd-section" style="margin-bottom:20px;">'+
+      '<div class="bAd-section-title">프린트 셋업 (운영자 1회 셋업용)</div>'+
+      '<div class="bAd-help" style="line-height:1.6;">'+
+      '관람객 메인 흐름 = 다이얼로그 X · 시뮬레이션만 · OS가 기억한 프린터로 자동 출력.<br>'+
+      '<b>첫 셋업 시</b> = 아래 "프린트 테스트" 버튼 → 다이얼로그 → 프린터·사이즈·컬러 셋팅 (한 번).<br>'+
+      '<b>iPad/iOS</b> = AirPrint 프린터 첫 선택 후 = OS가 기억 = 이후 관람객 출력 = 같은 프린터로 자동.'+
+      '</div>'+
+      '<div style="display:flex;gap:10px;align-items:center;">'+
+      '  <button class="bAd-btn primary" data-act="print-test" style="font-size:13px;padding:10px 18px;">▶ 프린트 테스트 (다이얼로그 호출)</button>'+
+      '  <span style="font-size:11px;color:#1F1F1D;opacity:0.6;">현재 책 표지로 테스트 인쇄</span>'+
+      '</div></div>'+
+
+      /* === JSON 백업 === */
       '<div class="bAd-help">설정을 JSON 파일로 내보내고 다른 키오스크에 붙여넣어 동일한 운영값을 공유할 수 있어요. 업로드 이미지는 base64로 함께 저장됩니다 (파일 용량 큼).</div>'+
       '<div class="bAd-section"><div class="bAd-section-title">현재 설정 (편집 가능)</div>'+
       '<textarea class="bAd-textarea" id="bAdJson" rows="20" style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;">' + escapeHtml(JSON.stringify(store, null, 2)) + '</textarea>'+
@@ -836,6 +850,21 @@
       '  <label class="bAd-btn" style="cursor:pointer;">⬆ 파일 업로드<input type="file" accept="application/json" id="bAdUpload" style="display:none;"></label>'+
       '</div></div>'
     );
+
+    /* 프린트 테스트 버튼 이벤트 */
+    var ptEl = body.querySelector('[data-act="print-test"]');
+    if (ptEl) ptEl.addEventListener('click', function(){
+      panel.classList.remove('open');
+      try {
+        if (typeof window.goPrint === 'function') {
+          window.goPrint();
+          setTimeout(function(){ try { window.print(); } catch(e){} }, 200);
+        } else {
+          window.print();
+        }
+        flash('프린트 테스트 → 다이얼로그 호출', true);
+      } catch(e) { flash('실패', false); }
+    });
     body.querySelector('[data-act="apply"]').addEventListener('click', function(){
       try {
         var v = JSON.parse(body.querySelector('#bAdJson').value);

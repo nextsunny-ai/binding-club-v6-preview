@@ -67,10 +67,8 @@ function goPrint() {
   if (selectedEl) selectedEl.classList.remove('selected');
   selectedEl = null;
 
-  // 1. 진짜 프린트 다이얼로그 (현재 디자이너 화면 = @media print CSS로 캔버스만 인쇄)
-  window.print();
-
-  // 2. 인쇄 후 시뮬레이션 화면 (발행 완료 연출)
+  // 메인 흐름 = 시뮬레이션만 (관람객) → 발행 완료 → OS 기억된 프린터로 자동 출력
+  // 다이얼로그는 어드민 "프린트 테스트" 버튼에서만 호출 (운영자 셋업용)
   document.getElementById('dStyle').textContent = 'No.0' + (BOOK_ORDER.indexOf(currentStyle) + 1);
   document.getElementById('dSerial').textContent =
     String(237 + Math.floor(Math.random() * 50)).padStart(4, '0');
@@ -83,6 +81,8 @@ function goPrint() {
   }, 2800);
   beep(880, 0.2);
 }
+// 어드민에서 호출 = 운영자 셋업 시 다이얼로그
+window.goPrint = goPrint;
 
 /* ----- gallery ----- */
 function renderGallery() {
