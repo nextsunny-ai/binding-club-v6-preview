@@ -1009,6 +1009,7 @@ html, body {
   line-height: 1.55;
   color: var(--cream);
 }
+.done-cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
 .done-cta {
   font-family: var(--en);
   font-size: 20px;
@@ -1022,6 +1023,18 @@ html, body {
   letter-spacing: 0.04em;
 }
 .done-cta:hover { background: var(--yellow); }
+.done-cta-secondary {
+  font-family: var(--en);
+  font-size: 18px;
+  background: transparent;
+  color: var(--cream);
+  padding: 15px 28px;
+  border-radius: 100px;
+  cursor: pointer;
+  border: 2px solid var(--cream);
+  letter-spacing: 0.04em;
+}
+.done-cta-secondary:hover { background: var(--cream); color: var(--ink); }
 </style>
 </head>
 <body>
@@ -1150,7 +1163,10 @@ html, body {
       <div class="done-num">★ <span id="dStyle">No.01</span> · #<span id="dSerial">0237</span>/9999 ★</div>
       <h1 class="done-msg">한정판 <em>내 책</em><br>발행 완료!</h1>
       <div class="done-tag">"오늘 만든 한 권은<br>전 세계 단 하나의 굿즈입니다."</div>
-      <div class="done-cta" onclick="goGallery()">▸ 다른 책 만들기 [SPACE]</div>
+      <div class="done-cta-row">
+        <div class="done-cta" onclick="goGallery()">▸ 다른 책 만들기 [SPACE]</div>
+        <div class="done-cta-secondary" onclick="goIntro()">⌂ 처음으로</div>
+      </div>
     </div>
   </div>
 </div>
